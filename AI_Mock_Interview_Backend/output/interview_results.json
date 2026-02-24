@@ -1,0 +1,185 @@
+[
+    {
+        "question_id": 1,
+        "skill": "Python",
+        "level": "Beginner",
+        "answer": "You",
+        "reference_answer": "The `input()` function was introduced in Python 3.x, it evaluates the input as Python code. The `raw_input()` function (renamed to `input()` in Python 3.x) only returns a string",
+        "relevance_score": 0.20819418132305145,
+        "missing_keywords": [
+            "string",
+            "code",
+            "input",
+            "python",
+            "function",
+            "raw_input"
+        ],
+        "dominant_emotion": "no_face",
+        "audio_emotion": "happy"
+    },
+    {
+        "question_id": 2,
+        "skill": "Python",
+        "level": "Follow-up",
+        "answer": "The encode function converts a string into bytes according to a specific encoding scheme and it is commonly used for tasks such as sending data over the internet or storing data in",
+        "reference_answer": "The `encode()` function converts a string into bytes according to a specified encoding scheme, and it's commonly used for tasks such as sending data over the internet or storing data in a file.",
+        "relevance_score": 96.9649076461792,
+        "missing_keywords": [
+            "specified",
+            "file"
+        ],
+        "dominant_emotion": "no_face",
+        "audio_emotion": "angry"
+    },
+    {
+        "question_id": 3,
+        "skill": "Python",
+        "level": "Intermediate",
+        "answer": "Decorators or syntax feature that allow us to modify or extend the behavior of function or classes, for example, function ls.lrucache32, the Fibonacci n.",
+        "reference_answer": "Decorators are a syntax feature that allows us to modify or extend the behavior of functions or classes. Example: @functools.lru_cache(32) def fibonacci(n):",
+        "relevance_score": 86.4275872707367,
+        "missing_keywords": [
+            "@functools.lru_cache(32",
+            "def",
+            "fibonacci(n"
+        ],
+        "dominant_emotion": "no_face",
+        "audio_emotion": "angry"
+    },
+    {
+        "question_id": 4,
+        "skill": "Python",
+        "level": "Advanced",
+        "answer": "I would employ a distributed catching system like Redis and Memcatch to utilize palasque",
+        "reference_answer": "I would employ a distributed caching system like Redis or Memcached, utilize Flask-Cache for caching frequently accessed data, and leverage multiprocessing libraries like joblib or dask to offload computationally expensive tasks, ensuring efficient memory utilization while handling high concurrency.",
+        "relevance_score": 37.58113384246826,
+        "missing_keywords": [
+            "utilization",
+            "concurrency",
+            "memory",
+            "cache",
+            "flask",
+            "joblib",
+            "task",
+            "high",
+            "leverage",
+            "datum",
+            "caching",
+            "expensive",
+            "efficient",
+            "library",
+            "memcached"
+        ],
+        "dominant_emotion": "no_face",
+        "audio_emotion": "happy"
+    },
+    {
+        "question_id": 5,
+        "skill": "Python",
+        "level": "Follow-up",
+        "answer": "To optimize utilization of CPU resources, I would use the thread pull executor for concurrent features. Set the maximum workers parameter to control the number of threads and use timeouts or retries to handle potential blocking or deadlocks.",
+        "reference_answer": "To optimize utilization of CPU resources, I would use the ThreadPoolExecutor from concurrent.futures, set the max_workers parameter to control the number of threads, and use timeouts or retries to handle potential blocking or deadlocks.",
+        "relevance_score": 83.68655443191528,
+        "missing_keywords": [
+            "threadpoolexecutor",
+            "max_workers",
+            "concurrent.future"
+        ],
+        "dominant_emotion": "no_face",
+        "audio_emotion": "happy"
+    },
+    {
+        "question_id": 6,
+        "skill": "SQL",
+        "level": "Beginner",
+        "answer": "A inner joint returns only rows that have matching values in both tables whereas a left joint returns all rows from the left table and matching rows from the right table with null values where there are no matches.",
+        "reference_answer": "An INNER JOIN returns only rows that have matching values in both tables, whereas a LEFT JOIN returns all rows from the left table and matching rows from the right table, with NULL values where there are no matches.",
+        "relevance_score": 88.04968595504761,
+        "missing_keywords": [
+            "join"
+        ],
+        "dominant_emotion": "no_face",
+        "audio_emotion": "fear"
+    },
+    {
+        "question_id": 7,
+        "skill": "SQL",
+        "level": "Intermediate",
+        "answer": "Select E.Employee ID, E.Name, E.Department from Employee, E.Join Departments, D on E.Department ID equal to E.Department ID where D.Name equal to",
+        "reference_answer": "SELECT e.employee_id, e.name, d.department FROM employees e JOIN departments d ON e.department_id = d.id WHERE d.name='Sales' AND DATE_PART('year', CURRENT_DATE - e.hire_date) > 5",
+        "relevance_score": 74.83857274055481,
+        "missing_keywords": [
+            "e.hire_date",
+            "d.department",
+            "d.name='sale",
+            "join",
+            "date_part('year",
+            "e.employee_id",
+            "current_date"
+        ],
+        "dominant_emotion": "no_face",
+        "audio_emotion": "happy"
+    },
+    {
+        "question_id": 8,
+        "skill": "SQL",
+        "level": "Advanced",
+        "answer": "Select e.job title, d.department name, e.stat date, e.salary plus collage, b.bonus,0 as total compensation from employees, e.join subcard date, interval, fire, and d.department name Equal to sales and e.salary greater than equal to 80,000.",
+        "reference_answer": "SELECT e.job_title, d.dept_name, e.start_date, e.salary + COALESCE(b.bonus, 0) AS total_compensation FROM employees e JOIN departments d ON e.dept_id = d.dept_id LEFT JOIN employee_bonuses b ON e.employee_id = b.employee_id WHERE e.employment_start_date <= DATE_SUB(CURDATE(), INTERVAL 5 YEAR) AND d.dept_name = 'Sales' AND e.salary >= 80000",
+        "relevance_score": 83.8358461856842,
+        "missing_keywords": [
+            "e.dept_id",
+            "total_compensation",
+            "e.employment_start_date",
+            "d.dept_name",
+            "b.employee_id",
+            "d.dept_id",
+            "e.job_title",
+            "date_sub(curdate",
+            "join",
+            "department",
+            "e.employee_id",
+            "year",
+            "coalesce(b.bonus"
+        ],
+        "dominant_emotion": "no_face",
+        "audio_emotion": "happy"
+    },
+    {
+        "question_id": 9,
+        "skill": "React",
+        "level": "Beginner",
+        "answer": "State refers to data that can be updated within a component where there are props or immutable values passed from parent components.",
+        "reference_answer": "State refers to data that can be updated within a component, whereas props are immutable values passed from parent components.",
+        "relevance_score": 92.99122095108032,
+        "missing_keywords": [],
+        "dominant_emotion": "no_face",
+        "audio_emotion": "happy"
+    },
+    {
+        "question_id": 10,
+        "skill": "React",
+        "level": "Intermediate",
+        "answer": "The context API allows components to share data without having to pass props down manually. It is useful in scenarios where multiple components need access to the same data such as the p-more authentication state.",
+        "reference_answer": "The Context API allows components to share data without having to pass props down manually. It's useful in scenarios where multiple components need access to the same data, such as a theme or authentication state.",
+        "relevance_score": 98.28397035598755,
+        "missing_keywords": [
+            "theme"
+        ],
+        "dominant_emotion": "no_face",
+        "audio_emotion": "happy"
+    },
+    {
+        "question_id": 11,
+        "skill": "React",
+        "level": "Advanced",
+        "answer": "A hosc is a function that takes a component as an argument and returns a new component with additional props and behavior for instance. You can create a hosc called withLoadingIndigator that wraps another component and it displays a loading indicator while the wrapped component is fetching data.",
+        "reference_answer": "A HOC is a function that takes a component as an argument and returns a new component with additional props or behavior. For instance, you can create a HOC called `withLoadingIndicator` that wraps another component and displays a loading indicator while the wrapped component is fetching data.",
+        "relevance_score": 50.28337240219116,
+        "missing_keywords": [
+            "withloadingindicator"
+        ],
+        "dominant_emotion": "no_face",
+        "audio_emotion": "happy"
+    }
+]

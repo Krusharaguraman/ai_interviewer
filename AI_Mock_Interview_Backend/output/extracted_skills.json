@@ -1,0 +1,56 @@
+{
+    "job_description": "\nWe are hiring a Full Stack Developer with strong experience in Python, Django,\nReact, and Node.js. The candidate should have experience working with SQL,\nGraphQL, and REST APIs. Knowledge of Docker, MongoDB, and cloud deployment\nis a plus. Familiarity with WebSocket and Redux is preferred.\n",
+    "total_skills_matched": 10,
+    "extracted_skills": [
+        {
+            "Skill ID": 1,
+            "Skill Name": "Python",
+            "Category": "Programming Languages"
+        },
+        {
+            "Skill ID": 149,
+            "Skill Name": "SQL",
+            "Category": "Web Frameworks"
+        },
+        {
+            "Skill ID": 48,
+            "Skill Name": "GraphQL",
+            "Category": "Programming Languages"
+        },
+        {
+            "Skill ID": 52,
+            "Skill Name": "Django",
+            "Category": "Programming Languages"
+        },
+        {
+            "Skill ID": 55,
+            "Skill Name": "React",
+            "Category": "Programming Languages"
+        },
+        {
+            "Skill ID": 58,
+            "Skill Name": "Node.js",
+            "Category": "Programming Languages"
+        },
+        {
+            "Skill ID": 86,
+            "Skill Name": "WebSocket",
+            "Category": "Programming Languages"
+        },
+        {
+            "Skill ID": 88,
+            "Skill Name": "Redux",
+            "Category": "Programming Languages"
+        },
+        {
+            "Skill ID": 152,
+            "Skill Name": "MongoDB",
+            "Category": "Web Frameworks"
+        },
+        {
+            "Skill ID": 194,
+            "Skill Name": "Docker",
+            "Category": "Mobile Development"
+        }
+    ]
+}
