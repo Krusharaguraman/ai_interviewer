@@ -2,19 +2,37 @@ import os
 import json
 import time
 import threading
-import sounddevice as sd
-import soundfile as sf
-import cv2
-import spacy
-from sentence_transformers import SentenceTransformer, util
-import ollama
-from faster_whisper import WhisperModel
+# audio / video libraries (optional, will raise clear error if missing)
+try:
+    import sounddevice as sd
+    import soundfile as sf
+except ImportError:
+    sd = None
+    sf = None
+
+try:
+    import cv2
+except ImportError:
+    cv2 = None
+
+# simple keyword extraction – avoid heavy NLP dependencies like spaCy which
+# currently has compatibility issues with Python 3.14.  We also provide a set
+# of stopwords to filter out common words.
 import re
+from sentence_transformers import SentenceTransformer, util
+
+# LLM interface may not be installed in every environment; load lazily
+try:
+    import ollama
+except ImportError:
+    ollama = None
+
+from faster_whisper import WhisperModel
 
 # =========================
 # CONFIGURATION
 # =========================
-BASE_DIR = "D:/finalyearprojecttesting/mypart/AI_Mock_Interview_Backend"
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUTPUT_DIR = os.path.join(BASE_DIR, "output")
 AUDIO_DIR = os.path.join(OUTPUT_DIR, "audio_answers")
 VIDEO_DIR = os.path.join(OUTPUT_DIR, "video_answers")
@@ -22,7 +40,7 @@ VIDEO_DIR = os.path.join(OUTPUT_DIR, "video_answers")
 os.makedirs(AUDIO_DIR, exist_ok=True)
 os.makedirs(VIDEO_DIR, exist_ok=True)
 
-MAX_TOTAL_QUESTIONS = 20
+MAX_TOTAL_QUESTIONS = 3
 LEVELS = ["Beginner", "Intermediate", "Advanced"]
 AUDIO_DURATION = 30  # seconds for testing
 THINKING_TIMER = 0
@@ -37,8 +55,9 @@ embed_model = SentenceTransformer("all-MiniLM-L6-v2")
 print("Loading Whisper model...")
 whisper_model = WhisperModel(WHISPER_MODEL_SIZE, compute_type="float32")
 
-print("Loading NLP model...")
-nlp = spacy.load("en_core_web_sm")
+# spaCy was previously used for keyword extraction but removed to
+# avoid compatibility problems with newer Python versions.  We now rely on a
+# lightweight regex-based extractor defined later.
 
 # =========================
 # LOAD SKILLS
@@ -58,53 +77,91 @@ qa_cache = {}
 # SINGLE LLM CALL: QUESTION + REFERENCE ANSWER
 # =========================
 def generate_question_and_answer(skill, level, context=None):
+
     key = f"{skill}_{level}_{context if context else ''}"
+
     if key in qa_cache:
         return qa_cache[key]
 
-    prompt = (
-        f"Generate one {level} level oral technical HR interview question for {skill}"
-    )
+    prompt = f"""
+You are an AI technical interviewer.
+
+Generate ONE {level} level technical interview question for the skill: {skill}.
+Also provide a short one-line reference answer.
+
+Return ONLY valid JSON in this format:
+
+{{
+  "question": "your question here",
+  "answer": "short reference answer here"
+}}
+"""
+
     if context:
-        prompt += f" focusing on this concept or keyword: {context}"
+        prompt += f"\nFocus on this concept: {context}"
 
-    prompt += (
-        ". Provide a concise one line reference answer. Return output in strict JSON format only like this:\n"
-        "{\n  \"question\": \"Your question here\",\n"
-        "  \"answer\": \"Your concise answer here\"\n}"
-    )
+    try:
 
-    response = ollama.chat(model="llama3", messages=[{"role": "user", "content": prompt}])
-    content = response["message"]["content"].strip()
+        response = ollama.chat(
+            model="llama3.2:1b",
+            messages=[{"role": "user", "content": prompt}]
+        )
 
-    # Robust JSON extraction
-    match = re.search(r"\{.*\}", content, re.DOTALL)
-    if match:
-        json_text = match.group()
-        try:
+        content = response["message"]["content"].strip()
+
+        # Debug print (optional)
+        # print("LLM RAW RESPONSE:", content)
+
+        # Extract JSON block
+        match = re.search(r"\{[\s\S]*?\}", content)
+
+        if match:
+            json_text = match.group()
+
             qa = json.loads(json_text)
-            question = qa.get("question", "No question found")
-            ref_answer = qa.get("answer", "No answer found")
-        except json.JSONDecodeError:
-            question = "No question found"
-            ref_answer = "No answer found"
-    else:
-        question = "No question found"
-        ref_answer = "No answer found"
+
+            question = qa.get("question", "").strip()
+            ref_answer = qa.get("answer", "").strip()
+
+        else:
+            question = ""
+            ref_answer = ""
+
+    except Exception as e:
+
+        print("LLM Error:", e)
+
+        question = ""
+        ref_answer = ""
+
+    # =============================
+    # Fallback (if model fails)
+    # =============================
+    if not question:
+        question = f"What is {skill}?"
+
+    if not ref_answer:
+        ref_answer = f"{skill} is an important concept in software development."
 
     qa_cache[key] = (question, ref_answer)
-    return question, ref_answer
 
+    return question, ref_answer
 # =========================
 # NLP KEYWORDS
 # =========================
+# simple english stopwords list (not exhaustive)
+STOPWORDS = {
+    "the", "and", "for", "with", "that", "this", "from", "your",
+    "you", "are", "not", "have", "has", "was", "were", "but",
+    "also", "when", "where", "what", "which", "their", "there",
+    "about", "into", "through", "during", "before", "after",
+    "above", "below", "to", "of", "in", "on", "a", "an", "is"
+}
+
 def extract_core_keywords(text):
-    doc = nlp(text.lower())
-    return set(
-        token.lemma_
-        for token in doc
-        if not token.is_stop and not token.is_punct and token.pos_ in ["NOUN", "PROPN", "ADJ"] and len(token.text) > 2
-    )
+    # pick words of length>=3, remove stopwords
+    words = re.findall(r"\b[a-zA-Z]{3,}\b", text.lower())
+    return set(w for w in words if w not in STOPWORDS)
 
 def find_missing_keywords(reference, answer):
     ref_keywords = extract_core_keywords(reference)
@@ -224,7 +281,8 @@ def start_interview():
                 "reference_answer": ref_answer,
                 "relevance_score": relevance_score,
                 "missing_keywords": missing_keywords,
-                "dominant_emotion": "",
+                # use consistent key for face emotion
+                "dominant_face_emotion": "",
                 "audio_emotion": ""
             })
 
@@ -279,7 +337,7 @@ def start_interview():
                     "reference_answer": gap_ref_answer,
                     "relevance_score": gap_score,
                     "missing_keywords": gap_missing,
-                    "dominant_emotion": "pending",
+                    "dominant_face_emotion": "pending",
                     "audio_emotion": ""
                 })
 

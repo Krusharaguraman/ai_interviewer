@@ -1,0 +1,13 @@
+pandas
+numpy
+sounddevice
+soundfile
+opencv-python
+sentence-transformers
+ollama
+faster-whisper
+torch
+librosa
+scikit-learn
+deepface
+matplotlib
